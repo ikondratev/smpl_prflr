@@ -16,4 +16,6 @@ Gem::Specification.new do |s|
   s.email = 'ilyafulleveline@gmail.com'
   s.homepage = 'https://github.com/ikondratev/smpl_prflr'
   s.files = `git ls-files`.split($RS)
+  s.add_dependency 'rubocop', '~> 1.26'
+  s.add_dependency 'rubocop-rake'
 end
