@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.version = '0.0.1'
   s.license = 'MIT'
   s.summary = 'Profiler'
-  s.description = 'smpl_prfler for profiler own code.'
+  s.description = 'SmplPrflr for profiler own code.'
   s.authors = ['Ilya Kondratev']
   s.email = 'ilyafulleveline@gmail.com'
   s.homepage = 'https://github.com/ikondratev/smpl_prflr'
@@ -18,4 +18,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'rubocop', '~> 1.26'
   s.add_dependency 'rubocop-rake'
   s.add_dependency 'ruby-prof', '~> 1.4', '>= 1.4.3'
+  s.add_dependency 'redis', '~> 4.6'
 end

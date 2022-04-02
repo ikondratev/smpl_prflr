@@ -58,3 +58,6 @@ Style/RaiseArgs:
 
 Style/IdenticalConditionalBranches:
   Enabled: false
+
+Style/ExplicitBlockArgument:
+  Enabled: false
