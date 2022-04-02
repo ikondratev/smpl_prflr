@@ -32,7 +32,9 @@ class SmplPrflr
     result = RubyProf.profile do
       yield
     end
-    result = RubyProf::GraphHtmlPrinter.new(result)
-    @redis.set(category, result.print($stdout, min_percent: 0))
+    printer = RubyProf::GraphHtmlPrinter.new(result)
+    line = ""
+    printer.print(line, min_percent: 0)
+    @redis.set(category, line)
   end
 end
