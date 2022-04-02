@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'smpl_prflr'
+SmplPrflr.profile(category: :common) { sleep 2 }
