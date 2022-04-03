@@ -17,9 +17,7 @@ requre 'smpl_prflr'
 ```sh
  require 'smpl_prflr'
  
- profiler = SmplPrflr.new
- 
- profiler.profile do
+ SmplPrflr.new.p do
    'your own code'
  end
 ```
