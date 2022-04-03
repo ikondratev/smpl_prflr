@@ -4,6 +4,8 @@ AllCops:
     - test/*
     - Rakefile
     - smpl_prflr.gemspec
+    - bin/*
+    - config.ru
 
 Style/FrozenStringLiteralComment:
   Enabled: false

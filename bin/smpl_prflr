@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+#
+Dir.chdir(File.join(File.dirname(__FILE__), ".."))
 
-require 'smpl_prflr'
-SmplPrflr.profile(category: :common) { sleep 2 }
+load ::File.expand_path("../../config.ru", __FILE__)

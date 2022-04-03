@@ -36,12 +36,12 @@ class SmplPrflr
       yield
     end
 
-    printer = RubyProf::GraphHtmlPrinter.new(result)
+    printer = RubyProf::FlatPrinter.new(result)
     printer.print(profiled, min_percent: 0)
-    @redis.set(category, line)
+    @redis.set(category, profiled)
 
     nil
   rescue StandardError => e
-    raise ProfileError.new e.message
+    raise ProfilerError.new e.message
   end
 end
