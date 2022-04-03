@@ -4,6 +4,7 @@ require 'redis'
 class SmplPrflr
   class ProfilerError < StandardError; end
   DEFAULT_HOST = "127.0.0.1".freeze
+
   # @author KILYA
   # @param [String] host
   # @param [Integer] port
@@ -26,13 +27,21 @@ class SmplPrflr
     "PONG"
   end
 
+  # @author KILYA
   # @param [String] category, default :common
-  # @example Its your own label for redis
-  def profile(category: :common)
+  # Its your own label for redis
+  def p(category)
+    profiled = ""
     result = RubyProf.profile do
       yield
     end
-    result = RubyProf::GraphHtmlPrinter.new(result)
-    @redis.set(category, result.print($stdout, min_percent: 0))
+
+    printer = RubyProf::FlatPrinter.new(result)
+    printer.print(profiled, min_percent: 0)
+    @redis.set(category, profiled)
+
+    nil
+  rescue StandardError => e
+    raise ProfilerError.new e.message
   end
 end
