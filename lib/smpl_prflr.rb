@@ -22,6 +22,7 @@
 
 require 'ruby-prof'
 require 'redis'
+require 'logger'
 
 class SmplPrflr
   class ProfilerError < StandardError; end
@@ -33,6 +34,7 @@ class SmplPrflr
   # @param [Integer] db
   # @example self.new(host: "http:/your.path", port: 555, db:1)
   def initialize(host: DEFAULT_HOST, port: 6379, db: 15)
+    @logger = Logger.new($stdout)
     @redis = Redis.new(
       host: host,
       port: port,
@@ -63,6 +65,6 @@ class SmplPrflr
 
     nil
   rescue StandardError => e
-    raise ProfilerError.new e.message
+    @logger.error(e.message.to_s)
   end
 end
