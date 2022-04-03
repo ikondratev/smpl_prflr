@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>=2.2'
   s.name = 'smpl_prflr'
   s.version = '0.0.2'
-  s.executables << 'kilya'
+  s.executables << 'smpl_prflr'
   s.license = 'MIT'
   s.summary = 'Profiler'
   s.description = 'SmplPrflr for profiler own code.'
