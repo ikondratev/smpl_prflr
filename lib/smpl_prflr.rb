@@ -55,15 +55,14 @@ class SmplPrflr
   # @author KILYA
   # Profile block of your code
   # @return [nil]
-  def p
-    profiled = ""
+  def p(prof: "")
     result = RubyProf.profile do
       yield
     end
 
     printer = RubyProf::FlatPrinter.new(result)
-    printer.print(profiled, min_percent: 0)
-    @redis.set(:profile, profiled)
+    printer.print(prof, min_percent: 0)
+    @redis.set(:profile, prof)
 
     nil
   rescue StandardError => e

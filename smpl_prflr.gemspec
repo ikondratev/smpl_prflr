@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = '2.7'
   s.required_ruby_version = '>=2.2'
   s.name = 'smpl_prflr'
-  s.version = '0.0.3'
+  s.version = '0.0.4'
   s.executables << 'smpl_prflr'
   s.license = 'MIT'
   s.summary = 'Profiler'

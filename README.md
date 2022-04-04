@@ -24,7 +24,7 @@ smpl_prflr
 ```sh
  require 'smpl_prflr'
  
- SmplPrflr.new.p do
+ SmplPrflr.new.p(prof: "") do
    'your own code'
  end
  
