@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2019-2022 Kondratev Ilya
@@ -26,14 +28,13 @@ require 'logger'
 
 class SmplPrflr
   class ProfilerError < StandardError; end
-  DEFAULT_HOST = "127.0.0.1".freeze
 
   # @author KILYA
   # @param [String] host
   # @param [Integer] port
   # @param [Integer] db
   # @example self.new(host: "http:/your.path", port: 555, db:1)
-  def initialize(host: DEFAULT_HOST, port: 6379, db: 15)
+  def initialize(host: "127.0.0.1", port: 6379, db: 15)
     @logger = Logger.new($stdout)
     @redis = Redis.new(
       host: host,
@@ -53,6 +54,7 @@ class SmplPrflr
 
   # @author KILYA
   # Profile block of your code
+  # @return [nil]
   def p
     profiled = ""
     result = RubyProf.profile do

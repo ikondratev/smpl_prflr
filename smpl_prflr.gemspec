@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'rubocop-rake'
   s.add_dependency 'ruby-prof', '~> 1.4', '>= 1.4.3'
   s.add_dependency 'redis', '~> 4.6'
+  s.add_dependency 'rack', '~> 2.2'
 end
