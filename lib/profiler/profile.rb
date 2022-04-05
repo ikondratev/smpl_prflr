@@ -22,33 +22,38 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require 'logger'
-require 'profiler/profile'
+require 'ruby-prof'
+require 'redis'
 
-module SmplPrflr
-  # @author KILYA
-  # Init logger
-  # Init Profiler
-  def initialize_profiler!
-    @logger = Logger.new($stdout)
-    @profiler = Profiler::Profile.new
-  end
+module Profiler
+  class Profile
+    class ProfilerError < StandardError; end
 
-  # @author KILYA
-  # @example PONG
-  # @return [String] PONG
-  def ping
-    "PONG"
-  end
-
-  # @author KILYA
-  # Profile block of your code
-  # @return [nil]
-  def p
-    @profiler.start do
-      yield
+    # @author KILYA
+    # Initialise redis
+    def initialize
+      @redis = Redis.new(
+        host: "127.0.0.1",
+        port: 6379,
+        db: 15
+      )
     end
-  rescue Profiler::ProfilerError => e
-    @logger.error(e.message.to_s)
+
+    # @author KILYA
+    # main point
+    def start
+      output = String.new
+      result = RubyProf.profile do
+        yield
+      end
+
+      printer = RubyProf::FlatPrinter.new(result)
+      printer.print(output, min_percent: 0)
+      @redis.set(:profile, output)
+
+      nil
+    rescue StandardError => e
+      raise ProfilerError.new e.message.to_s
+    end
   end
 end
