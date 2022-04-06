@@ -24,14 +24,16 @@
 
 require 'logger'
 require 'profiler/profile'
+require 'env/loading'
 
 module SmplPrflr
   # @author KILYA
   # Init logger
   # Init Profiler
-  def initialize_profiler!
+  def initialize_profiler!(mod: :development)
+    env = Env::Loading.new(app_mode: mod)
     @logger = Logger.new($stdout)
-    @profiler = Profiler::Profile.new
+    @profiler = Profiler::Profile.new(env)
   end
 
   # @author KILYA
