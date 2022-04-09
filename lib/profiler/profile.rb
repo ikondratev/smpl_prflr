@@ -31,11 +31,11 @@ module Profiler
 
     # @author KILYA
     # Initialise redis
-    def initialize
+    def initialize(env)
       @redis = Redis.new(
-        host: "127.0.0.1",
-        port: 6379,
-        db: 15
+        host: env.store(value: "host") || "127.0.0.1",
+        port: env.store(value: "port").to_i || 6379,
+        db: env.store(value: "db").to_i || 15
       )
     end
 
