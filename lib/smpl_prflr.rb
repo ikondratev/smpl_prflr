@@ -27,7 +27,6 @@ require "config"
 require 'ruby-prof'
 require 'redis'
 require 'profiler/constants'
-require 'active_support/all'
 
 module SmplPrflr
   # @author KILYA
@@ -35,13 +34,13 @@ module SmplPrflr
   # Init Profiler
   # Load env
   # Init Redis
-  def initialize_profiler!(mod: "development")
+  def initialize_profiler!(mod = :development)
     Config.setup do |config|
       config.const_name = "Settings"
       config.use_env = false
     end
 
-    env = ::ActiveSupport::StringInquirer.new(mod)
+    env = mod.to_sym
     path = Dir.pwd << ("/config")
     Config.load_and_set_settings(Config.setting_files(path, env))
     Settings.env = env
