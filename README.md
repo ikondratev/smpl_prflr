@@ -23,7 +23,7 @@ requre 'smpl_prflr'
 
  include SmplPrflr 
 
- orinitialize_profiler!
+ initialize_profiler!(mod: "production")
  
  p { block_of_your_own_code }
 ```
