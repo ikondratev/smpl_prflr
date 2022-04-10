@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = '2.7'
   s.required_ruby_version = '>=2.2'
   s.name = 'smpl_prflr'
-  s.version = '0.0.6'
+  s.version = '0.0.7'
   s.executables << 'smpl_prflr'
   s.license = 'MIT'
   s.summary = 'Profiler'
@@ -21,5 +21,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'ruby-prof', '~> 1.4', '>= 1.4.3'
   s.add_dependency 'redis', '~> 4.6'
   s.add_dependency 'rack', '~> 2.2'
-  s.add_dependency 'figaro'
+  s.add_dependency 'config', '~> 4.0'
+  s.add_dependency 'activesupport', '~> 6.1.1'
 end

@@ -23,17 +23,35 @@
 # SOFTWARE.
 
 require 'logger'
-require 'profiler/profile'
-require 'env/loading'
+require "config"
+require 'ruby-prof'
+require 'redis'
+require 'profiler/constants'
+require 'active_support/all'
 
 module SmplPrflr
   # @author KILYA
   # Init logger
   # Init Profiler
-  def initialize_profiler!(mod: :development)
-    env = Env::Loading.new(app_mode: mod)
+  # Load env
+  # Init Redis
+  def initialize_profiler!(mod: "development")
+    Config.setup do |config|
+      config.const_name = "Settings"
+      config.use_env = false
+    end
+
+    env = ::ActiveSupport::StringInquirer.new(mod)
+    path = Dir.pwd << ("/config")
+    Config.load_and_set_settings(Config.setting_files(path, env))
+    Settings.env = env
+
     @logger = Logger.new($stdout)
-    @profiler = Profiler::Profile.new(env)
+    @redis = Redis.new(
+      host: Settings.HOST || Profiler::Constants::DEFAULT_HOST,
+      port: Settings.PORT || Profiler::Constants::DEFAULT_PORT,
+      db: Settings.DB || Profiler::Constants::DEFAULT_DB
+    )
   end
 
   # @author KILYA
@@ -47,10 +65,17 @@ module SmplPrflr
   # Profile block of your code
   # @return [nil]
   def p
-    @profiler.start do
+    output = String.new
+    result = RubyProf.profile do
       yield
     end
-  rescue Profiler::ProfilerError => e
-    @logger.error(e.message.to_s)
+
+    printer = RubyProf::FlatPrinter.new(result)
+    printer.print(output, min_percent: 0)
+    @redis.set(:profile, output)
+
+    nil
+  rescue StandardError => e
+    @logger.error e.message.to_s
   end
 end
