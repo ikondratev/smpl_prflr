@@ -62,3 +62,6 @@ Style/IdenticalConditionalBranches:
 
 Style/ExplicitBlockArgument:
   Enabled: false
+
+Style/RedundantFreeze:
+  Enabled: false

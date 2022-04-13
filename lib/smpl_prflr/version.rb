@@ -22,59 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require 'logger'
-require "config"
-require 'ruby-prof'
-require 'redis'
-require 'smpl_prflr/constants'
-
 module SmplPrflr
-  # @author KILYA
-  # Init logger
-  # Init Profiler
-  # Load env
-  # Init Redis
-  def initialize_profiler!(mod = :development)
-    Config.setup do |config|
-      config.const_name = "Settings"
-      config.use_env = false
-    end
-
-    env = mod.to_sym
-    path = Dir.pwd << ("/config")
-    Config.load_and_set_settings(Config.setting_files(path, env))
-    Settings.env = env
-
-    @logger = Logger.new($stdout)
-    @redis = Redis.new(
-      host: Settings.HOST || Profiler::Constants::HOST,
-      port: Settings.PORT || Profiler::Constants::PORT,
-      db: Settings.DB || Profiler::Constants::DB
-    )
-  end
-
-  # @author KILYA
-  # @example PONG
-  # @return [String] PONG
-  def ping
-    "PONG"
-  end
-
-  # @author KILYA
-  # Profile block of your code
-  # @return [nil]
-  def p
-    output = String.new
-    result = RubyProf.profile do
-      yield
-    end
-
-    printer = RubyProf::FlatPrinter.new(result)
-    printer.print(output, min_percent: 0)
-    @redis.set(:profile, output)
-
-    nil
-  rescue StandardError => e
-    @logger.error e.message.to_s
-  end
+  VERSION = "0.0.8".freeze
 end
