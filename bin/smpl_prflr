@@ -9,7 +9,7 @@ require 'redis'
 #  url: 127.0.0.1
 #  method GET
 def my_method env
-  redis = Redis.new host: "127.0.0.1", port: 6379, db: 15
+  redis = Redis.new host: "127.0.0.1" || env[:HOST], port: 6379 || env[:PORT], db: 15 || env[:DB]
   result = redis.get(:profile) || "Nothing to profile"
   [200, {}, [result]]
 rescue StandardError

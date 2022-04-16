@@ -24,6 +24,12 @@
 
 module SmplPrflr
   module Constants
+    MODES = {
+      production: "config/production.yml",
+      development: "config/development.yml",
+      test: "config/test.yml"
+    }.freeze
+
     HOST = "127.0.0.1".freeze
     PORT = 6379
     DB = 15
