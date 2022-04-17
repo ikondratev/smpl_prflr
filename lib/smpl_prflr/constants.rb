@@ -31,7 +31,7 @@ module SmplPrflr
     }.freeze
 
     HOST = "127.0.0.1".freeze
-    PORT = 6379
-    DB = 15
+    PORT = "6379"
+    DB = "15"
   end
 end

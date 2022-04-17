@@ -1,4 +1,9 @@
+lib = File.expand_path("lib", __dir__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
 require 'English'
+require 'smpl_prflr/version'
+
 Gem::Specification.new do |s|
   s.specification_version = 2 if s.respond_to? :specification_version=
   if s.respond_to? :required_rubygems_version=
@@ -7,7 +12,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = '2.7'
   s.required_ruby_version = '>=2.2'
   s.name = 'smpl_prflr'
-  s.version = '0.0.8'
+  s.version = SmplPrflr::VERSION
   s.executables << 'smpl_prflr'
   s.license = 'MIT'
   s.summary = 'Profiler'
