@@ -23,7 +23,7 @@
 # SOFTWARE.
 
 require 'logger'
-require "config"
+require "figaro"
 require 'ruby-prof'
 require 'redis'
 require 'smpl_prflr/constants'
@@ -35,22 +35,19 @@ module SmplPrflr
   # Load env
   # Init Redis
   def initialize_profiler!(mod = :development)
-    Config.setup do |config|
-      config.const_name = "Settings"
-      config.use_env = false
-    end
+    path = File.expand_path(Constants::MODES[mod.to_sym])
+    Figaro.application = Figaro::Application.new(environment: mod.to_sym, path: path)
+    Figaro.load
 
-    env = mod.to_sym
-    path = Dir.pwd << ("/config")
-    Config.load_and_set_settings(Config.setting_files(path, env))
-    Settings.env = env
+    # host = Figaro.env.host || Profiler::Constants::HOST
+    # port = Figaro.env.port || Profiler::Constants::PORT
+    # db = Figaro.env.db || Profiler::Constants::DB
+    host = Figaro.env.host
+    port = Figaro.env.port
+    db = Figaro.env.db
 
     @logger = Logger.new($stdout)
-    @redis = Redis.new(
-      host: Settings.HOST || Profiler::Constants::HOST,
-      port: Settings.PORT || Profiler::Constants::PORT,
-      db: Settings.DB || Profiler::Constants::DB
-    )
+    @redis = Redis.new host, port, db
   end
 
   # @author KILYA
@@ -64,11 +61,11 @@ module SmplPrflr
   # Profile block of your code
   # @return [nil]
   def p
-    output = String.new
     result = RubyProf.profile do
       yield
     end
 
+    output = String.new
     printer = RubyProf::FlatPrinter.new(result)
     printer.print(output, min_percent: 0)
     @redis.set(:profile, output)
