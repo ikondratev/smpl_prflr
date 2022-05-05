@@ -29,25 +29,35 @@ require 'redis'
 require 'smpl_prflr/constants'
 
 module SmplPrflr
+  class ProfilerError < StandardError; end
+
   # @author KILYA
   # Init logger
+  #
   # Init Profiler
+  #
   # Load env
+  #
   # Init Redis
+  # @raise [ProfilerError]
   def initialize_profiler!(mod = :development)
-    path = File.expand_path(Constants::MODES[mod.to_sym])
-    Figaro.application = Figaro::Application.new(environment: mod.to_sym, path: path)
+    path = File.expand_path(
+      Constants::MODES[mod.to_sym]
+    )
+    Figaro.application = Figaro::Application.new(
+      environment: mod.to_sym,
+      path: path
+    )
     Figaro.load
 
-    # host = Figaro.env.host || Profiler::Constants::HOST
-    # port = Figaro.env.port || Profiler::Constants::PORT
-    # db = Figaro.env.db || Profiler::Constants::DB
-    host = Figaro.env.host
-    port = Figaro.env.port
-    db = Figaro.env.db
-
     @logger = Logger.new($stdout)
-    @redis = Redis.new host, port, db
+    @redis = Redis.new(
+      host: Figaro.env.host || SmplPrflr::Constants::HOST,
+      port: Figaro.env.port || SmplPrflr::Constants::PORT,
+      db: Figaro.env.db || SmplPrflr::Constants::DB
+    )
+  rescue StandardError => e
+    raise ProfilerError.new e.message
   end
 
   # @author KILYA

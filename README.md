@@ -23,7 +23,7 @@ requre 'smpl_prflr'
 
  include SmplPrflr 
 
- initialize_profiler!(mod: "production")
+ initialize_profiler! :production
  
  p { block_of_your_own_code }
 ```
