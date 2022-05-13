@@ -10,6 +10,6 @@ class TestPing < Minitest::Test
   end
 
   def test_version
-    assert_equal("0.0.9", SmplPrflr::VERSION)
+    assert_equal("0.1.0", SmplPrflr::VERSION)
   end
 end

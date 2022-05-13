@@ -22,54 +22,33 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require 'logger'
-require "figaro"
 require 'ruby-prof'
-require 'redis'
+require 'smpl_prflr/initializers/base'
 require 'smpl_prflr/constants'
+require 'smpl_prflr/errors'
 
 module SmplPrflr
-  class ProfilerError < StandardError; end
+  include SmplPrflr::Initializers::Base
 
-  # @author KILYA
-  # Init logger
-  #
   # Init Profiler
-  #
-  # Load env
   #
   # Init Redis
   # @raise [ProfilerError]
-  def initialize_profiler!(mod = :development)
-    path = File.expand_path(
-      Constants::MODES[mod.to_sym]
-    )
-    Figaro.application = Figaro::Application.new(
-      environment: mod.to_sym,
-      path: path
-    )
-    Figaro.load
-
-    @logger = Logger.new($stdout)
-    @redis = Redis.new(
-      host: Figaro.env.host || SmplPrflr::Constants::HOST,
-      port: Figaro.env.port || SmplPrflr::Constants::PORT,
-      db: Figaro.env.db || SmplPrflr::Constants::DB
-    )
-  rescue StandardError => e
-    raise ProfilerError.new e.message
+  def initialize_profiler!
+    initialize_base!
+  rescue  SmplPrflr::Error => e
+    raise SmplPrflr::ClassProfilerError, e.message
   end
 
-  # @author KILYA
   # @example PONG
   # @return [String] PONG
   def ping
     "PONG"
   end
 
-  # @author KILYA
   # Profile block of your code
   # @return [nil]
+  # @raise ProfilerError
   def p
     result = RubyProf.profile do
       yield
@@ -81,7 +60,7 @@ module SmplPrflr
     @redis.set(:profile, output)
 
     nil
-  rescue StandardError => e
-    @logger.error e.message.to_s
+  rescue SmplPrflr::Error => e
+    raise SmplPrflr::ClassProfilerError.new, e.message
   end
 end
