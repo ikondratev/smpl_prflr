@@ -23,5 +23,15 @@
 # SOFTWARE.
 
 module SmplPrflr
-  VERSION = "0.1.0".freeze
+  # main error
+  class Error < StandardError; end
+
+  # raise when profiler error
+  class ProfilerError < Error; end
+
+  # raise when load resources error
+  class LoadResourcesError < Error; end
+
+  # raise in main class
+  class ClassProfilerError < Error; end
 end
